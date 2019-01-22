@@ -16,24 +16,11 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-
+config.vm.synced_folder "./", "/vagrant"
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  config.vm.provider "virtualbox" do |vb|
-      # Don't boot with headless mode
-      #   vb.gui = true
-      #
-      #   # Use VBoxManage to customize the VM. For example to change memory:
-      vb.customize ["modifyvm", :id, "--memory", "3192"]
-      vb.customize ["modifyvm", :id, "--ioapic", "on"]
-      vb.customize ["modifyvm", :id, "--cpus", "2"]
-      # Make some effort to avoid clock skew
-      vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", "5000"]
-      vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-start"]
-      vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-on-restore", "1"]
-  end
 
   # If you are on windows then you must use a version of git >= 1.8.x
   # to update the submodules in order to build. Older versions of git
@@ -41,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # removing this line causes "A box must be specified." error
   # and this is the default box that will be booted if no name is specified
-  config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "generic/ubuntu1804"
 
   # LTS, EOL April, 2019:
   config.vm.define "trusty32", autostart: false do |trusty32|
@@ -138,5 +125,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-end
+  # 18.10 bleeding edge
+  config.vm.define "ubuntu1804-hyperv", autostart: false do |cosmic64|
+    config.vm.box = "generic/ubuntu1804"
+    config.vm.provision :shell, path: "Tools/vagrant/initvagrant.sh"
+  end
 
+end

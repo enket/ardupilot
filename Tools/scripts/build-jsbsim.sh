@@ -11,10 +11,11 @@ if [ -f $JSBBINARY ]; then
     echo "$JSBBINARY exists, skipping build. (to force rebuild then remove this file and re-run) "
 else
     echo "$JSBBINARY does not exist, building it in your home folder:"
-    cd ~ 
+    cd ~
     rm -rf jsbsim
     git clone https://github.com/tridge/jsbsim.git
     cd jsbsim
+    git checkout b586c95814add7f2134a3c28ed1bccd00efee708
     ./autogen.sh
     make -j2
 fi
